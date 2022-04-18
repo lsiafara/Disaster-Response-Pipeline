@@ -23,6 +23,14 @@ from models.features import CountWordsBeforeVerb
 app = Flask(__name__)
 
 def tokenize(text):
+    '''
+    INPUT 
+        text - a string to tokenize
+        
+    OUTPUT
+        clean_tokens - a list of words resulting from the split text
+    '''
+
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
 

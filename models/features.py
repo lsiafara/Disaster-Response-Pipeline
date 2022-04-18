@@ -10,12 +10,10 @@ class CountWordsBeforeVerb(BaseEstimator, TransformerMixin):
     def count_words_before_verb(self, text):
         '''
         INPUT 
-        text - a string with the text
+            text - a string with the text
         
         OUTPUT
-            X - an array of strings holding the disaster messages
-            Y - an array of 36 columns (categories) holding the label flag (0/1)
-            category_names -  a list with the names of the categories
+            counter - the number of words before the first verb of the text
         '''
     
         # tokenize by sentences

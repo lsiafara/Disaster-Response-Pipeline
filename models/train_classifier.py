@@ -94,7 +94,7 @@ def build_model():
                   'features__text_pipeline__tfidf__norm': ['l2', 'l1'],
               }
 
-    model = GridSearchCV(pipeline, param_grid=parameters, scoring='f1_micro')
+    model = GridSearchCV(pipeline, param_grid=parameters, scoring='f1_micro', verbose=3)
     
     return model
 
@@ -133,6 +133,14 @@ def save_model(model, model_filepath):
 
  
 def main():
+    '''
+    Saves the classifier model
+
+    INPUT 
+        model - a classification model
+        model_filepath - the path to save the model file
+    '''
+
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
