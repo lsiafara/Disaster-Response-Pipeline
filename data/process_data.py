@@ -4,7 +4,16 @@ import pandas as pd
 import sqlalchemy
 
 
-def load_data(messages_filepath, categories_filepath):
+def load_data(messages_filepath, categories_filepath): 
+    '''
+    INPUT 
+        messages_filepath - a string with the path to the messages csv file
+        categories_filepath - a string with the path to the categories csv file
+        
+    OUTPUT
+        df - a dataframe with the merged messages and categories columns
+    '''
+    
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = pd.merge(messages, categories, how= "inner", on='id')
@@ -12,6 +21,14 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    '''
+    INPUT 
+        df - a dataframe with the merged messages and categories columns
+        
+    OUTPUT
+        df - the df dataframe with the cleaned data
+    '''
+
     # create a dataframe of the 36 individual category columns
     categories = df['categories'].str.split(pat=';', expand= True)
     
@@ -37,16 +54,33 @@ def clean_data(df):
     
     # remove duplicates
     df = df[~df.duplicated()]
-     
+
+    # replace 2s with 1a in the column 'related'
+    # for explanation how to treat 2s see this post:
+    # https://knowledge.udacity.com/questions/136791
+    df['related'] = df['related'].replace(2,1)
+
     return df
 
 
 def save_data(df, database_filepath):
+    '''
+    Stores a dataframe into an sql database
+
+    INPUT 
+        df - a dataframe with the data to store in an sql database
+        database_filepath - the path to the sql database
+    '''
+
     engine = sqlalchemy.create_engine('sqlite:///' + database_filepath)
     df.to_sql('DisasterResponse', engine, if_exists='replace', index=False)  
 
 
 def main():
+    '''
+    Loads, cleans, and saves the data into an sql database
+    '''
+
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
